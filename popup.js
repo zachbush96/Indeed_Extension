@@ -12,28 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const companyNameXPath = document.getElementById('company-name-xpath');
   const jobDescriptionXPath = document.getElementById('job-description-xpath');
 
-  // Listen for updates from the background script
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.action === 'updateField') {
-      if (message.step === 0) {
-        jobTitleInput.value = message.textContent;
-        jobTitleXPath.textContent = `XPath: ${message.xpath}`;
-      } else if (message.step === 1) {
-        companyNameInput.value = message.textContent;
-        companyNameXPath.textContent = `XPath: ${message.xpath}`;
-      } else if (message.step === 2) {
-        jobDescriptionTextarea.value = message.textContent;
-        jobDescriptionXPath.textContent = `XPath: ${message.xpath}`;
-      }
-      checkIfAllFieldsFilled();
-    } else if (message.action === 'allStepsCompleted') {
-      alert('All selections are saved. You can now generate your resume.');
-      checkIfAllFieldsFilled();
-    }
-  });
+  const dimOverlay = document.getElementById('dim-overlay');
+
+  const fields = [
+    document.getElementById('spotlight-job-title'),
+    document.getElementById('spotlight-company-name'),
+    document.getElementById('spotlight-job-description'),
+  ];
+
+  let currentStep = 0;
 
   startSelectionButton.addEventListener('click', () => {
     console.log('Begin Now button clicked. Injecting content script.');
+    dimOverlay.classList.remove('hidden');
+    highlightField(currentStep);
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tabId = tabs[0].id;
@@ -48,11 +40,37 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             console.log('Content script injected successfully.');
             chrome.tabs.sendMessage(tabId, { action: 'activateSelectionMode' });
-            alert(steps[0]);
           }
         }
       );
     });
+  });
+
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.action === 'updateField') {
+      if (message.step === 0) {
+        jobTitleInput.value = message.textContent;
+        jobTitleXPath.textContent = `XPath: ${message.xpath}`;
+      } else if (message.step === 1) {
+        companyNameInput.value = message.textContent;
+        companyNameXPath.textContent = `XPath: ${message.xpath}`;
+      } else if (message.step === 2) {
+        jobDescriptionTextarea.value = message.textContent;
+        jobDescriptionXPath.textContent = `XPath: ${message.xpath}`;
+      }
+      checkIfAllFieldsFilled();
+    } else if (message.action === 'nextStep') {
+      removeHighlight(currentStep);
+      currentStep++;
+      if (currentStep < fields.length) {
+        highlightField(currentStep);
+      } else {
+        dimOverlay.classList.add('hidden');
+      }
+    } else if (message.action === 'allStepsCompleted') {
+      console.log('All selections are saved. You can now generate your resume.');
+      checkIfAllFieldsFilled();
+    }
   });
 
   createResumeButton.addEventListener('click', () => {
@@ -87,5 +105,22 @@ document.addEventListener('DOMContentLoaded', () => {
       startSelectionButton.disabled = true;
       createResumeButton.classList.remove('hidden');
     }
+  }
+
+  function highlightField(step) {
+    fields.forEach((field, index) => {
+      if (index === step) {
+        field.classList.remove('hidden');
+        field.classList.add('highlighted-field');
+      } else {
+        field.classList.add('hidden');
+        field.classList.remove('highlighted-field');
+      }
+    });
+  }
+
+  function removeHighlight(step) {
+    fields[step].classList.remove('highlighted-field');
+    fields[step].classList.add('hidden');
   }
 });
