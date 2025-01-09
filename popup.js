@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const companyNameXPath = document.getElementById('company-name-xpath');
   const jobDescriptionXPath = document.getElementById('job-description-xpath');
 
-  const dimOverlay = document.getElementById('dim-overlay');
-
   const fields = [
     document.getElementById('spotlight-job-title'),
     document.getElementById('spotlight-company-name'),
@@ -24,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   startSelectionButton.addEventListener('click', () => {
     console.log('Begin Now button clicked. Injecting content script.');
-    dimOverlay.classList.remove('hidden');
+
+    // Highlight the first field
     highlightField(currentStep);
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -60,12 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       checkIfAllFieldsFilled();
     } else if (message.action === 'nextStep') {
+      // Remove highlight from the current step
       removeHighlight(currentStep);
       currentStep++;
       if (currentStep < fields.length) {
+        // Highlight the next field
         highlightField(currentStep);
       } else {
-        dimOverlay.classList.add('hidden');
+        console.log('All steps completed.');
+        // Remove all highlights after completion
+        removeAllHighlights();
       }
     } else if (message.action === 'allStepsCompleted') {
       console.log('All selections are saved. You can now generate your resume.');
@@ -104,16 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (jobTitleInput.value && companyNameInput.value && jobDescriptionTextarea.value) {
       startSelectionButton.disabled = true;
       createResumeButton.classList.remove('hidden');
+      // Remove all highlights since all fields are filled
+      removeAllHighlights();
     }
   }
 
   function highlightField(step) {
     fields.forEach((field, index) => {
       if (index === step) {
-        field.classList.remove('hidden');
         field.classList.add('highlighted-field');
       } else {
-        field.classList.add('hidden');
         field.classList.remove('highlighted-field');
       }
     });
@@ -121,6 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function removeHighlight(step) {
     fields[step].classList.remove('highlighted-field');
-    fields[step].classList.add('hidden');
+  }
+
+  function removeAllHighlights() {
+    fields.forEach((field) => {
+      field.classList.remove('highlighted-field');
+    });
   }
 });
