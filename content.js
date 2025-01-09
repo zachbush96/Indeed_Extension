@@ -6,19 +6,20 @@
 
     if (message.action === 'activateSelectionMode') {
       activateSelectionMode();
+    } else if (message.action === 'nextStep') {
+      alert(message.stepMessage);
     }
   });
 
   function activateSelectionMode() {
     console.log('Selection mode activated.');
+    alert('Selection mode is active. Press Escape to stop.');
 
     document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.15)';
     document.body.addEventListener('mouseover', highlightElement);
     document.body.addEventListener('mouseout', removeHighlight);
     document.body.addEventListener('click', handleElementClick);
     document.addEventListener('keydown', stopSelectionMode);
-
-    alert('Selection mode is active. Press Escape to stop.');
   }
 
   function highlightElement(event) {

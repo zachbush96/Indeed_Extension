@@ -11,21 +11,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     storedSelections.push({ xpath, textContent });
 
+    // Update popup fields dynamically
     chrome.runtime.sendMessage({
       action: 'updateField',
       step: selectionStep,
       xpath,
-      textContent
+      textContent,
     });
 
     selectionStep++;
     if (selectionStep < steps.length) {
-      alert(steps[selectionStep]);
+      // Prompt user for the next step
+      chrome.runtime.sendMessage({ action: 'nextStep', stepMessage: steps[selectionStep] });
     } else {
       console.log('All selections completed:', storedSelections);
       selectionStep = 0; // Reset for next use
       chrome.storage.local.set({ selections: storedSelections }, () => {
-        alert('Selections saved. Resume generation can proceed.');
+        chrome.runtime.sendMessage({ action: 'allStepsCompleted' });
       });
     }
   }
