@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Indeed Job to Resume",
+  "version": "1.1",
+  "description": "Pull job information from Indeed and generate a perfect resume via AI backend.",
+  "permissions": ["activeTab", "scripting", "storage", "sidePanel"],
+  "host_permissions": ["https://*.indeed.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Indeed Job to Resume"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
+  }
+}
