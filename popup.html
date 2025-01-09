@@ -19,6 +19,7 @@
     h1 {
       font-size: 22px;
       margin-bottom: 15px;
+      margin-top: 55px;
       color: #007bff;
       text-align: center;
       font-weight: 600;
@@ -41,7 +42,7 @@
       background-color: #fff;
       font-size: 14px;
       color: #333;
-      box-sizing: border-box; /* Ensure padding and border are included in the total width */
+      box-sizing: border-box;
     }
 
     input[readonly], textarea[readonly] {
@@ -128,15 +129,96 @@
       transition: all 0.3s ease;
     }
 
-    /* Ensure all spotlight fields are visible and fully covered by the highlight */
     .spotlight-field {
       position: relative;
       width: 100%;
-      box-sizing: border-box; /* Include padding and border in the element's total width and height */
+      box-sizing: border-box;
+    }
+
+    .user-profile {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    #profile-picture {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #user-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    #profile-dropdown-btn {
+      padding: 2px 6px;
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    #profile-dropdown-btn:hover {
+      color: #007bff;
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #fff;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      z-index: 1000;
+      margin-top: 5px;
+    }
+
+    .dropdown-content a {
+      color: #333;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f5f5f5;
     }
   </style>
 </head>
 <body>
+  
+  <div class="user-profile">
+    <img id="profile-picture" src="" alt="Profile Picture">
+    <div class="profile-info">
+      <span id="user-name"></span>
+      <button id="profile-dropdown-btn">▼</button>
+      <div id="profile-dropdown" class="dropdown-content hidden">
+        <a href="#" id="sign-out">Sign Out</a>
+      </div>
+    </div>
+  </div>
   
   <h1>Indeed Job to Resume</h1>
   

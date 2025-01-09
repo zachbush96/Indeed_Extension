@@ -3,7 +3,7 @@
   "name": "Indeed Job to Resume",
   "version": "1.1",
   "description": "Pull job information from Indeed and generate a perfect resume via AI backend.",
-  "permissions": ["activeTab", "scripting", "storage", "sidePanel"],
+  "permissions": ["activeTab", "scripting", "storage", "identity", "sidePanel"],
   "host_permissions": ["https://*.indeed.com/*"],
   "background": {
     "service_worker": "background.js"
@@ -13,5 +13,15 @@
   },
   "side_panel": {
     "default_path": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["login.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "oauth2": {
+    "client_id": "169810374201-adqdrbv5eqratspoj2tqr7rvf5ecokkc.apps.googleusercontent.com",
+    "scopes": ["email"]
   }
 }
