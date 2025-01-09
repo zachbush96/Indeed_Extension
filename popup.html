@@ -6,42 +6,98 @@
   <title>Job to Resume</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      padding: 15px;
       width: 400px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.5;
     }
     h1 {
-      font-size: 20px;
-      margin-bottom: 10px;
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #007bff;
+      text-align: center;
+      font-weight: 600;
     }
     label {
       display: block;
-      font-weight: bold;
-      margin-top: 10px;
+      font-weight: 500;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #555;
     }
     input, textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #fff;
+      font-size: 14px;
+      color: #333;
+    }
+    input[readonly], textarea[readonly] {
+      background-color: #f5f5f5;
+      color: #777;
     }
     button {
-      padding: 10px 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 500;
       background-color: #007bff;
-      color: white;
+      color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       width: 100%;
+      transition: background-color 0.3s ease;
     }
-    button:hover {
+    button[disabled] {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
       background-color: #0056b3;
     }
     .info {
+      font-size: 13px;
+      color: #666;
+    }
+    .hidden {
+      display: none;
+    }
+    .divider {
+      margin: 20px 0;
+      border-top: 1px solid #ddd;
+    }
+    #instructions {
+      text-align: center;
       font-size: 14px;
-      color: #555;
+      margin-bottom: 20px;
+    }
+    details {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #f5f5f5;
+      padding: 10px;
+    }
+    details summary {
+      font-size: 16px;
+      font-weight: 500;
+      color: #007bff;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    details summary:hover {
+      color: #0056b3;
+    }
+    details[open] {
+      padding: 15px;
+    }
+    .settings-field {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -62,7 +118,26 @@
   <textarea id="job-description" placeholder="Not selected yet" rows="5" readonly></textarea>
   <small id="job-description-xpath" class="info"></small>
   
+  <div class="divider"></div>
+  
   <button id="start-selection">Begin Now</button>
+  <button id="create-resume" class="hidden">Create Resume</button>
+
+  <details>
+    <summary>Settings</summary>
+    <div class="settings-field">
+      <label for="api-url">API URL</label>
+      <input type="text" id="api-url" value="https://lorem.ipsum/api">
+    </div>
+    <div class="settings-field">
+      <label for="api-key">API KEY</label>
+      <input type="text" id="api-key" value="12345-lorem-ipsum">
+    </div>
+    <div class="settings-field">
+      <label for="test-field">TEST FIELD</label>
+      <input type="text" id="test-field" value="Lorem ipsum dolor sit amet">
+    </div>
+  </details>
 
   <script src="popup.js" defer></script>
 </body>
